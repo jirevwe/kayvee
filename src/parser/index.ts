@@ -47,7 +47,24 @@ export class Parser {
   }
 
   private parseArray(str: string) {
-    return str.split(this.crlfStr).filter((_, i) => i !== 0 && i % 2 === 0);
+    const elems = str.split(this.crlfStr);
+    elems.shift();
+    elems.pop();
+
+    const e = elems.filter((it) => !it.startsWith(this.bulkStr));
+
+    return e.map((it) =>
+      this.startsWith(it) ? this.decode(Buffer.from(it)) : it
+    );
+  }
+
+  /**
+   * checks if the first character is +, :, $, *
+   */
+  private startsWith(value: string) {
+    return [this.bulkStr, this.arrayStr, this.intStr, this.charStr].includes(
+      value[0]
+    );
   }
 
   private parseSingleString(str: string) {
