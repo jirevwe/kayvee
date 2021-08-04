@@ -1,10 +1,18 @@
 export class Parser {
-  charStr = '+';
-  errorStr = '-';
-  intStr = ':';
-  bulkStr = '$';
-  arrayStr = '*';
-  crlfStr = '\r\n';
+  private charStr = '+';
+  private errorStr = '-';
+  private intStr = ':';
+  private bulkStr = '$';
+  private arrayStr = '*';
+  private crlfStr = '\r\n';
+
+  returnReply: Function;
+  returnError: Function;
+
+  constructor(options: { returnReply: Function; returnError: Function }) {
+    this.returnReply = options.returnReply;
+    this.returnError = options.returnError;
+  }
 
   /**
    * convert a command array to a command string
@@ -41,9 +49,11 @@ export class Parser {
       command = this.parseSingleString(str);
     } else if (str[0] === this.intStr) {
       command = this.parseInteger(str);
+    } else if (str[0] === this.errorStr) {
+      command = this.parseError(str);
     }
 
-    return command;
+    this.returnReply(command);
   }
 
   private parseArray(str: string) {
@@ -72,11 +82,14 @@ export class Parser {
   }
 
   private parseBulkString(str: string) {
-    const temp = str.split(this.crlfStr);
-    return temp[1];
+    return str.split(this.crlfStr)[1];
   }
 
   private parseInteger(str: string) {
     return Number(str.substr(1).split(this.crlfStr).join(''));
+  }
+
+  private parseError(str: string) {
+    this.returnError(new Error('Generice Redis Error'));
   }
 }
