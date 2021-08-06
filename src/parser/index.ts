@@ -82,7 +82,7 @@ export class Parser {
   }
 
   private parseBulkString(str: string) {
-    return str.split(this.crlfStr)[1];
+    return str.startsWith('$-1') ? null : str.split(this.crlfStr)[1];
   }
 
   private parseInteger(str: string) {
@@ -90,6 +90,6 @@ export class Parser {
   }
 
   private parseError(str: string) {
-    this.returnError(new Error('Generice Redis Error'));
+    this.returnError(new Error('Generic Redis Error'));
   }
 }

@@ -73,6 +73,15 @@ export class Client {
     return this.connect();
   }
 
+  writeRaw(str: string): Promise<string> {
+    if (!this.ready) return Promise.reject(new Error('Client not ready'));
+
+    return new Promise((resolve, reject) => {
+      this.commands.push(new PromiseOperation(resolve, reject));
+      this.socket.write(str);
+    });
+  }
+
   send(command: string[]): Promise<string> {
     if (!this.ready) return Promise.reject(new Error('Client not ready'));
 
