@@ -1,3 +1,8 @@
+interface ParserOptions {
+  returnReply: Function;
+  returnError: Function;
+}
+
 export class Parser {
   private charStr = '+';
   private errorStr = '-';
@@ -9,14 +14,17 @@ export class Parser {
   returnReply: Function;
   returnError: Function;
 
-  constructor(options: { returnReply: Function; returnError: Function }) {
-    this.returnReply = options.returnReply;
-    this.returnError = options.returnError;
+  constructor(options: ParserOptions = null) {
+    this.returnReply = options?.returnReply;
+    this.returnError = options?.returnError;
   }
 
   /**
-   * convert a command array to a command string
-   * used when sending commands to the server
+   * Converts a command array to a command string
+   * Used when sending commands to the server
+   *
+   * All commands sent to the server look something like this
+   * `*3\r\n$3\r\nSET\r\n$4r\r\nkey\r\n$5\r\nvalue\r\n`
    */
   encode(command: any[]): string {
     let commandStr = this.arrayStr + command.length + this.crlfStr;
@@ -53,7 +61,8 @@ export class Parser {
       command = this.parseError(str);
     }
 
-    this.returnReply(command);
+    if (this.returnReply) this.returnReply(command);
+    return command;
   }
 
   private parseArray(str: string) {
