@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "start:dev": "nodemon ./dist",
+    "start:dev:server": "nodemon ./dist/server",
     "watch:tsc": "rm -rf ./dist && tsc --watch -p ./tsconfig.json",
     "build:tsc": "tsc -p ./tsconfig.json",
     "test": "jest"

@@ -11,7 +11,7 @@ export class Server {
   // the in-memory db
   private store = {};
 
-  constructor(port: number = 6379, host: string = '127.0.0.1') {
+  constructor(port: number = 6378, host: string = '127.0.0.1') {
     if (port) this.port = port;
     if (host) this.host = host;
 

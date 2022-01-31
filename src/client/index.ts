@@ -4,7 +4,7 @@ import { PromiseOperation } from '../operation';
 
 export class Client {
   private socket: Socket;
-  private options = { host: '127.0.0.1', port: 6379 };
+  private options = { host: '127.0.0.1', port: 6378 };
 
   private commands: Array<PromiseOperation> = [];
   private ERROR_CODES = ['EALREADY', 'EPIPE', 'ECONNREFUSED'];
